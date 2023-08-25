@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, Alert, Pressable } from 'react-native';
+import { StyleSheet, View, Text, TextInput, Alert, Pressable, Clipboard } from 'react-native';
 import Constants from 'expo-constants';
 
 const dictionary = new Map([
@@ -39,23 +39,55 @@ function getKey(map, value) {
     return null;
 }
 
+// Utils input functions
+function filterAlphaAndSpace(inputString) {
+    return inputString.replace(/[^a-zA-Z\s]/g, '');
+}
+function filterNumbersAndHyphens(inputString) {
+    return inputString.replace(/[^0-9\-\s]/g, '');
+}
+
 export default function ConverterScreen() {
     const [text, setText] = useState('');
     const [encryptedText, setEncryptedText] = useState('');
 
     const copyText = ()=>{
+        Clipboard.setString(text);
         Alert.alert("Copied successfully!", text)
     }
 
+    const pasteText = () => {
+        Clipboard.getString().then(content => {
+            setText(content);
+            encode(content)
+        });
+    }
+
     const copyEncryptedText = ()=>{
+        Clipboard.setString(encryptedText);
         Alert.alert("Copied successfully!", encryptedText)
+    }
+
+    const pasteEncryptedText = () => {
+        Clipboard.getString().then(content => {
+            setEncryptedText(content);
+            decode(content)
+        });
+    }
+
+    const resetText = ()=>{
+        setText("");
+    }
+
+    const resetEncryptedText = () => {
+        setEncryptedText("");
     }
 
     // App mechanic
     const encode = (value)=>
     {
         //Decode only accept alphabets and space
-        //add check function here...
+        value = filterAlphaAndSpace(value);
         
         setText(value);
 
@@ -79,7 +111,8 @@ export default function ConverterScreen() {
     const decode = (value)=>
     {
         //Decode only accept numbers and - and space
-        //add check function here...
+        value = filterNumbersAndHyphens(value);
+        
         setEncryptedText(value);
 
         let decrypted = '';
@@ -116,9 +149,15 @@ export default function ConverterScreen() {
                     onChangeText={text => encode(text)}
                     style={styles.textArea}
                 />
-                <View style={styles.encodeContainer}>
-                    <Pressable style={styles.button} onPress={copyText}>
-                        <Text style={styles.text}>Copy message</Text>
+                <View style={styles.buttonsContainer}>
+                    <Pressable style={[styles.button, styles.copyButton]} onPress={copyText}>
+                        <Text style={styles.text}>Copy</Text>
+                    </Pressable>
+                    <Pressable style={[styles.button, styles.pasteButton]} onPress={pasteText}>
+                        <Text style={styles.text}>Paste</Text>
+                    </Pressable>
+                    <Pressable style={[styles.button, styles.resetButton]} onPress={resetText}>
+                        <Text style={styles.text}>Reset</Text>
                     </Pressable>
                 </View>
                 <TextInput
@@ -132,9 +171,15 @@ export default function ConverterScreen() {
                     onChangeText={text => decode(text)}
                     style={styles.textArea}
                 />
-                <View style={styles.encodeContainer}>
-                    <Pressable style={styles.button} onPress={copyEncryptedText}>
-                        <Text style={styles.text}>Copy encrypted message</Text>
+                <View style={styles.buttonsContainer}>
+                    <Pressable style={[styles.button, styles.copyButton]} onPress={copyEncryptedText}>
+                        <Text style={styles.text}>Copy</Text>
+                    </Pressable>
+                    <Pressable style={[styles.button, styles.pasteButton]} onPress={pasteEncryptedText}>
+                        <Text style={styles.text}>Paste</Text>
+                    </Pressable>
+                    <Pressable style={[styles.button, styles.resetButton]} onPress={resetEncryptedText}>
+                        <Text style={styles.text}>Reset</Text>
                     </Pressable>
                 </View>
             </View>
@@ -155,7 +200,6 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     textAreaContainer:{
-        
     },
     textArea: {
         fontSize: 16,
@@ -169,15 +213,29 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         padding: 10,
     },
+    buttonsContainer: {
+        marginVertical: 20,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     button: {
         borderRadius: 6,
+        width: '32%',
         paddingVertical: 10,
-        paddingLeft: 10, 
-        marginVertical: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    copyButton: {
         backgroundColor: '#33B5E5',
     },
+    pasteButton: {
+        backgroundColor: '#e58e32',
+    },
+    resetButton: {
+        backgroundColor: 'e53232'
+    },
     text: {
-        fontSize: 13,
+        fontSize: 12,
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,

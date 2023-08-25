@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.yahyalazrek.NumberEncryption"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2e0731fe-deee-4d18-872a-b3d1afe9176e"
+      }
     }
   }
 }
