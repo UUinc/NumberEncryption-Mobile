@@ -54,6 +54,9 @@ export default function ConverterScreen() {
     // App mechanic
     const encode = (value)=>
     {
+        //Decode only accept alphabets and space
+        //add check function here...
+        
         setText(value);
 
         let encrypted = '';
@@ -75,6 +78,8 @@ export default function ConverterScreen() {
 
     const decode = (value)=>
     {
+        //Decode only accept numbers and - and space
+        //add check function here...
         setEncryptedText(value);
 
         let decrypted = '';
