@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#e58e32',
     },
     resetButton: {
-        backgroundColor: 'e53232'
+        backgroundColor: '#e53232'
     },
     text: {
         fontSize: 12,
