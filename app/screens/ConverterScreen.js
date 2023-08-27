@@ -88,6 +88,8 @@ export default function ConverterScreen() {
     {
         //Decode only accept alphabets and space
         value = filterAlphaAndSpace(value);
+        //Convert to lowercase
+        value = value.toLowerCase();
         
         setText(value);
 
@@ -112,6 +114,8 @@ export default function ConverterScreen() {
     {
         //Decode only accept numbers and - and space
         value = filterNumbersAndHyphens(value);
+        //Convert to lowercase
+        value = value.toLowerCase();
         
         setEncryptedText(value);
 
